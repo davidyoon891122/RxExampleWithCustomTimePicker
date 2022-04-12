@@ -27,11 +27,29 @@ final class WriteViewController: UIViewController {
         return button
     }()
 
+    private let separatorView = Separator()
+
     private lazy var titleTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "제목 입력"
-        textField.font = .systemFont(ofSize: 14.0, weight: .medium)
+        textField.font = .systemFont(ofSize: 18.0, weight: .bold)
         return textField
+    }()
+
+    private let titleSeparatorView = Separator()
+
+    private lazy var timePickerHStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .fillProportionally
+        stackView.spacing = 4.0
+        [
+            timeTitleLabel,
+            openTimePickerbutton
+        ]
+            .forEach {
+                stackView.addArrangedSubview($0)
+            }
+        return stackView
     }()
 
     private lazy var timeTitleLabel: UILabel = {
@@ -61,13 +79,16 @@ private extension WriteViewController {
         [
             closeButton,
             completeButton,
+            separatorView,
             titleTextField,
-            timeTitleLabel,
-            openTimePickerbutton
+            titleSeparatorView,
+            timePickerHStackView
         ]
             .forEach {
                 view.addSubview($0)
             }
+
+        let inset: CGFloat = 16.0
 
         closeButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(4.0)
@@ -81,7 +102,28 @@ private extension WriteViewController {
             $0.width.height.equalTo(closeButton)
         }
 
+        separatorView.snp.makeConstraints {
+            $0.top.equalTo(closeButton.snp.bottom).offset(4.0)
+            $0.leading.trailing.equalToSuperview()
+        }
 
+        titleTextField.snp.makeConstraints {
+            $0.top.equalTo(separatorView.snp.bottom).offset(4.0)
+            $0.leading.equalToSuperview().offset(inset)
+            $0.trailing.equalToSuperview().offset(-inset)
+            $0.height.equalTo(70.0)
+        }
 
+        titleSeparatorView.snp.makeConstraints {
+            $0.top.equalTo(titleTextField.snp.bottom).offset(4.0)
+            $0.leading.equalToSuperview().offset(inset)
+            $0.trailing.equalToSuperview().offset(-inset)
+        }
+
+        timePickerHStackView.snp.makeConstraints {
+            $0.top.equalTo(titleSeparatorView.snp.bottom).offset(4.0)
+            $0.leading.equalToSuperview().offset(inset)
+            $0.trailing.equalToSuperview().offset(-inset)
+        }
     }
 }

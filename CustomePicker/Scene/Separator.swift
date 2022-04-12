@@ -25,7 +25,7 @@ class Separator: UIView {
 private extension Separator {
     func setupViews() {
         addSubview(separator)
-
+        separator.backgroundColor = .secondaryLabel
         separator.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.height.equalTo(1.0)
