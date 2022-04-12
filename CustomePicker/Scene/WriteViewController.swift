@@ -57,12 +57,13 @@ final class WriteViewController: UIViewController {
         let label = UILabel()
         label.text = "시작 시간"
         label.textColor = .label
-        label.font = .systemFont(ofSize: 12.0, weight: .medium)
+        label.font = .systemFont(ofSize: 18.0, weight: .medium)
         return label
     }()
 
     private lazy var openTimePickerbutton: UIButton = {
         let button = UIButton()
+        button.titleLabel?.font = .systemFont(ofSize: 18.0, weight: .medium)
         button.setTitle("타임 피커", for: .normal)
         button.setTitleColor(.blue, for: .normal)
         return button

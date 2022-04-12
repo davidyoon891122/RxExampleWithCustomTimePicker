@@ -12,6 +12,9 @@ import RxCocoa
 import RxSwift
 
 final class CustomTimePickerView: UIViewController {
+    private let disposeBag = DisposeBag()
+
+    private let viewModel = CustomViewModel()
 
     private lazy var blackView: UIView = {
         let view = UIView()
@@ -32,9 +35,64 @@ final class CustomTimePickerView: UIViewController {
         return view
     }()
 
+    private lazy var timeInputHStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.layer.cornerRadius = 10
+        stackView.layer.borderWidth = 1
+        stackView.layer.borderColor = UIColor.lightGray.cgColor
+        stackView.distribution = .fillProportionally
+
+        [
+            hourTextField,
+            commaLabel,
+            minuteTextField
+        ]
+            .forEach {
+                stackView.addArrangedSubview($0)
+            }
+        return stackView
+    }()
+
+    private lazy var hourTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "00"
+        textField.textAlignment = .center
+        textField.keyboardType = .numberPad
+        return textField
+    }()
+
+    private lazy var commaLabel: UILabel = {
+        let label = UILabel()
+        label.text = ":"
+        return label
+    }()
+
+    private lazy var minuteTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "00"
+        textField.textAlignment = .center
+        textField.keyboardType = .numberPad
+        return textField
+    }()
+
+    private lazy var completeButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Complete", for: .normal)
+        button.setTitleColor(.blue, for: .normal)
+        return button
+    }()
+
+    private lazy var testLabel: UILabel = {
+        let label = UILabel()
+        label.text = "초기화"
+        label.textColor = .label
+        return label
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        bindUI()
         setupTapGesture()
     }
 }
@@ -59,14 +117,111 @@ private extension CustomTimePickerView {
             $0.width.equalTo(300.0)
             $0.height.equalTo(200.0)
         }
+
+        [
+            timeInputHStackView,
+            completeButton,
+            testLabel
+        ]
+            .forEach {
+                timePickerView.addSubview($0)
+            }
+
+        let inset: CGFloat = 16.0
+
+        timeInputHStackView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview()
+            $0.width.equalTo(150.0)
+            $0.height.equalTo(65.0)
+        }
+
+        completeButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-inset)
+            $0.bottom.equalToSuperview().offset(-inset)
+        }
+
+        testLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview()
+        }
     }
 
     func setupTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissView))
         blackView.addGestureRecognizer(tapGesture)
+
+        let dismissKeyboardTapGesture = UITapGestureRecognizer(target: self, action: #selector(dissmissKeyboard))
+        timePickerView.addGestureRecognizer(dismissKeyboardTapGesture)
+    }
+
+    func bindUI() {
+        hourTextField.rx.text
+            .orEmpty
+            .bind(to: viewModel.hourTextFieldInRelay)
+            .disposed(by: disposeBag)
+
+        viewModel.handleHourTextField()
+
+        viewModel.hourText
+            .bind(to: testLabel.rx.text)
+            .disposed(by: disposeBag)
+
+        minuteTextField.rx.text
+            .orEmpty
+            .subscribe(onNext: { [weak self] str in
+                guard let self = self else { return }
+                let result = self.trimHour(str)
+                if self.checkMinute(result) {
+                    self.minuteTextField.text = result
+                } else {
+                    self.minuteTextField.text = ""
+                }
+            })
+            .disposed(by: disposeBag)
+
+        completeButton.rx.tap
+            .bind(to: viewModel.closeButtonInRelay )
+            .disposed(by: disposeBag)
+
+        viewModel.closeButtonOutReply
+            .subscribe(onNext: {
+                self.dismiss(animated: false, completion: nil)
+            })
+            .disposed(by: disposeBag)
+
     }
 
     @objc func dismissView() {
         dismiss(animated: false, completion: nil)
+    }
+
+    @objc func dissmissKeyboard() {
+        view.endEditing(true)
+    }
+
+    func trimHour(_ hour: String) -> String {
+        if hour.count > 2 {
+            let index = hour.index(hour.startIndex, offsetBy: 2)
+            return String(hour[..<index])
+        } else {
+            return hour
+        }
+    }
+
+    func checkHour(_ result: String) -> Bool {
+        if Int(result) ?? 0 > 12  || Int(result) ?? 0 < 0 {
+            print("kidding")
+            return false
+        }
+        return true
+    }
+
+    func checkMinute(_ result: String) -> Bool {
+        if Int(result) ?? 0 > 59 || Int(result) ?? 0 < 0 {
+            print("kidding")
+            return false
+        }
+        return true
     }
 }
