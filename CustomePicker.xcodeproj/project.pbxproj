@@ -19,6 +19,7 @@
 		ADFA550E2804EEC600CFB6AF /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = ADFA550D2804EEC600CFB6AF /* RxSwift */; };
 		ADFA55102804F11700CFB6AF /* WriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA550F2804F11700CFB6AF /* WriteViewController.swift */; };
 		ADFA55132804F47D00CFB6AF /* Separator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA55122804F47D00CFB6AF /* Separator.swift */; };
+		ADFA5516280501A200CFB6AF /* CustomTimePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA5515280501A200CFB6AF /* CustomTimePickerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		ADFA54FF2804EA2600CFB6AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADFA550F2804F11700CFB6AF /* WriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteViewController.swift; sourceTree = "<group>"; };
 		ADFA55122804F47D00CFB6AF /* Separator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Separator.swift; sourceTree = "<group>"; };
+		ADFA5515280501A200CFB6AF /* CustomTimePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTimePickerView.swift; sourceTree = "<group>"; };
 		B5329FCF6269F4E252F7659F /* Pods_CustomePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CustomePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4986CB6BF65C539AA5BCAB2 /* Pods-CustomePicker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CustomePicker.debug.xcconfig"; path = "Target Support Files/Pods-CustomePicker/Pods-CustomePicker.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -98,6 +100,7 @@
 				ADFA54F52804EA2400CFB6AF /* ViewController.swift */,
 				ADFA550F2804F11700CFB6AF /* WriteViewController.swift */,
 				ADFA55122804F47D00CFB6AF /* Separator.swift */,
+				ADFA5515280501A200CFB6AF /* CustomTimePickerView.swift */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -239,6 +242,7 @@
 				ADFA54F22804EA2400CFB6AF /* AppDelegate.swift in Sources */,
 				ADFA55132804F47D00CFB6AF /* Separator.swift in Sources */,
 				ADFA55102804F11700CFB6AF /* WriteViewController.swift in Sources */,
+				ADFA5516280501A200CFB6AF /* CustomTimePickerView.swift in Sources */,
 				ADFA54F42804EA2400CFB6AF /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

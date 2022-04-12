@@ -165,7 +165,6 @@ private extension WriteViewController {
             .throttle(.milliseconds(300))
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                print("closeButton tapped")
                 self.dismiss(animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
@@ -175,8 +174,18 @@ private extension WriteViewController {
             .throttle(.milliseconds(300))
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
-                print("completeButton tapped")
                 self.dismiss(animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
+
+        openTimePickerbutton.rx.tap
+            .asDriver()
+            .throttle(.milliseconds(300))
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                let customTimePickerView = CustomTimePickerView()
+                customTimePickerView.modalPresentationStyle = .fullScreen
+                self.present(customTimePickerView, animated: false, completion: nil)
             })
             .disposed(by: disposeBag)
     }
