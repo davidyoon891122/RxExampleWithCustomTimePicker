@@ -163,8 +163,12 @@ private extension CustomTimePickerView {
 
         viewModel.handleHourTextField()
 
+//        viewModel.hourText
+//            .bind(to: testLabel.rx.text)
+//            .disposed(by: disposeBag)
+
         viewModel.hourText
-            .bind(to: testLabel.rx.text)
+            .bind(to: hourTextField.rx.text)
             .disposed(by: disposeBag)
 
         minuteTextField.rx.text

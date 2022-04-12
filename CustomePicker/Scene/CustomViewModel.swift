@@ -44,9 +44,8 @@ class CustomViewModel: CustomViewModelInputs, CustomViewModelOutputs {
     func handleHourTextField() {
         hourTextFieldInRelay
             .map(trimHour)
-            .filter {
-                print($0)
-                return self.checkHour($0)
+            .map {
+                self.checkHour($0) ? $0 : ""
             }
             .bind(to: hourText)
             .disposed(by: disposeBag)
