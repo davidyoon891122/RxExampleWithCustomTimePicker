@@ -12,6 +12,7 @@ import RxSwift
 import RxCocoa
 
 final class WriteViewController: UIViewController {
+    private let disposeBag = DisposeBag()
 
     private lazy var closeButton: UIButton = {
         let button = UIButton()
@@ -67,14 +68,28 @@ final class WriteViewController: UIViewController {
         return button
     }()
 
+    private let timePickerSeparator = Separator()
+
+    private lazy var textView: UITextView = {
+        let textView = UITextView()
+        textView.font = .systemFont(ofSize: 14.0, weight: .medium)
+        textView.layer.cornerRadius = 12
+        textView.layer.borderColor = UIColor.lightGray.cgColor
+        textView.layer.borderWidth = 1.0
+        textView.layer.masksToBounds = true
+        return textView
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViews()
+        addSubviews()
+        setLayoutConstraint()
+        bindUI()
     }
 }
 
 private extension WriteViewController {
-    func setupViews() {
+    func addSubviews() {
         view.backgroundColor = .systemBackground
         [
             closeButton,
@@ -82,12 +97,16 @@ private extension WriteViewController {
             separatorView,
             titleTextField,
             titleSeparatorView,
-            timePickerHStackView
+            timePickerHStackView,
+            timePickerSeparator,
+            textView
         ]
             .forEach {
                 view.addSubview($0)
             }
+    }
 
+    func setLayoutConstraint() {
         let inset: CGFloat = 16.0
 
         closeButton.snp.makeConstraints {
@@ -125,5 +144,40 @@ private extension WriteViewController {
             $0.leading.equalToSuperview().offset(inset)
             $0.trailing.equalToSuperview().offset(-inset)
         }
+
+        timePickerSeparator.snp.makeConstraints {
+            $0.top.equalTo(timePickerHStackView.snp.bottom).offset(4.0)
+            $0.leading.equalToSuperview().offset(inset)
+            $0.trailing.equalToSuperview().offset(-inset)
+        }
+
+        textView.snp.makeConstraints {
+            $0.top.equalTo(timePickerHStackView.snp.bottom).offset(inset)
+            $0.leading.equalToSuperview().offset(inset)
+            $0.trailing.equalToSuperview().offset(-inset)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-inset)
+        }
+    }
+
+    func bindUI() {
+        closeButton.rx.tap
+            .asDriver()
+            .throttle(.milliseconds(300))
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                print("closeButton tapped")
+                self.dismiss(animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
+
+        completeButton.rx.tap
+            .asDriver()
+            .throttle(.milliseconds(300))
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                print("completeButton tapped")
+                self.dismiss(animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
     }
 }
