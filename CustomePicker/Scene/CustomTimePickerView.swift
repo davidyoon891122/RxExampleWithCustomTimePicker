@@ -35,6 +35,19 @@ final class CustomTimePickerView: UIViewController {
         return view
     }()
 
+    private let meridiems = ["AM", "PM"]
+
+    private lazy var segmentControl: UISegmentedControl = {
+        let segment = UISegmentedControl(items: meridiems)
+        segment.selectedSegmentIndex = 0
+        segment.addTarget(
+            self,
+            action: #selector(segmentControlValueChanged),
+            for: .valueChanged
+        )
+        return segment
+    }()
+
     private lazy var timeInputHStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.layer.cornerRadius = 10
@@ -112,6 +125,7 @@ private extension CustomTimePickerView {
         }
 
         [
+            segmentControl,
             timeInputHStackView,
             completeButton
         ]
@@ -120,6 +134,11 @@ private extension CustomTimePickerView {
             }
 
         let inset: CGFloat = 16.0
+
+        segmentControl.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.centerX.equalToSuperview()
+        }
 
         timeInputHStackView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -210,5 +229,9 @@ private extension CustomTimePickerView {
             return false
         }
         return true
+    }
+
+    @objc func segmentControlValueChanged(_ sender: UISegmentedControl) {
+        print(sender.selectedSegmentIndex)
     }
 }

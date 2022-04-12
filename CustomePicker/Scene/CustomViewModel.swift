@@ -70,7 +70,6 @@ class CustomViewModel: CustomViewModelInputs, CustomViewModelOutputs {
 
     func checkHour(_ result: String) -> Bool {
         if Int(result) ?? 0 > 12  || Int(result) ?? 0 < 0 {
-            print("kidding")
             return false
         }
         return true
@@ -78,7 +77,6 @@ class CustomViewModel: CustomViewModelInputs, CustomViewModelOutputs {
 
     func checkMinute(_ result: String) -> Bool {
         if Int(result) ?? 0 > 59 || Int(result) ?? 0 < 0 {
-            print("kidding")
             return false
         }
         return true
