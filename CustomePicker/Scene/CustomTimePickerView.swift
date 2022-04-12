@@ -23,6 +23,12 @@ final class CustomTimePickerView: UIViewController {
     private lazy var timePickerView: UIView = {
         let view = UIView()
         view.backgroundColor = .brown
+        view.layer.cornerRadius = 14.0
+        view.layer.masksToBounds = false
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.8
+        view.layer.shadowRadius = 10
+        view.layer.shadowOffset = CGSize(width: 10, height: 20)
         return view
     }()
 
