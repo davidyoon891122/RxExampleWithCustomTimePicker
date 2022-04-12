@@ -82,13 +82,6 @@ final class CustomTimePickerView: UIViewController {
         return button
     }()
 
-    private lazy var testLabel: UILabel = {
-        let label = UILabel()
-        label.text = "초기화"
-        label.textColor = .label
-        return label
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -120,8 +113,7 @@ private extension CustomTimePickerView {
 
         [
             timeInputHStackView,
-            completeButton,
-            testLabel
+            completeButton
         ]
             .forEach {
                 timePickerView.addSubview($0)
@@ -140,11 +132,6 @@ private extension CustomTimePickerView {
             $0.trailing.equalToSuperview().offset(-inset)
             $0.bottom.equalToSuperview().offset(-inset)
         }
-
-        testLabel.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.equalToSuperview()
-        }
     }
 
     func setupTapGesture() {
@@ -162,10 +149,6 @@ private extension CustomTimePickerView {
             .disposed(by: disposeBag)
 
         viewModel.handleHourTextField()
-
-//        viewModel.hourText
-//            .bind(to: testLabel.rx.text)
-//            .disposed(by: disposeBag)
 
         viewModel.hourText
             .bind(to: hourTextField.rx.text)
