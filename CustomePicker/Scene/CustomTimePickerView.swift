@@ -47,6 +47,9 @@ final class CustomTimePickerView: UIViewController {
 
     private lazy var segmentControl: UISegmentedControl = {
         let segment = UISegmentedControl(items: meridiems)
+        segment.layer.borderWidth = 1.0
+        segment.layer.borderColor = UIColor.lightGray.cgColor
+        segment.layer.cornerRadius = 12.0
         segment.selectedSegmentIndex = 0
         segment.addTarget(
             self,
@@ -85,6 +88,7 @@ final class CustomTimePickerView: UIViewController {
     private lazy var commaLabel: UILabel = {
         let label = UILabel()
         label.text = ":"
+        label.textAlignment = .center
         return label
     }()
 
@@ -98,6 +102,7 @@ final class CustomTimePickerView: UIViewController {
 
     private lazy var completeButton: UIButton = {
         let button = UIButton()
+        button.titleLabel?.font = .systemFont(ofSize: 14.0, weight: .medium)
         button.setTitle("Complete", for: .normal)
         button.setTitleColor(.blue, for: .normal)
         return button
@@ -144,7 +149,7 @@ private extension CustomTimePickerView {
         let inset: CGFloat = 16.0
 
         segmentControl.snp.makeConstraints {
-            $0.top.equalToSuperview()
+            $0.top.equalToSuperview().offset(inset)
             $0.centerX.equalToSuperview()
         }
 
@@ -156,7 +161,7 @@ private extension CustomTimePickerView {
         }
 
         completeButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-inset)
+            $0.centerX.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-inset)
         }
     }
