@@ -193,9 +193,11 @@ private extension CustomTimePickerView {
             .disposed(by: disposeBag)
 
         completeButton.rx.tap
-            .subscribe(onNext: {
-                guard let hour = self.hourTextField.text else { return }
-                guard let minute = self.minuteTextField.text else { return }
+            .subscribe(onNext: { [weak self] in
+                guard let self = self,
+                      let hour = self.hourTextField.text,
+                      let minute = self.minuteTextField.text
+                else { return }
                 if hour == "" || minute == "" {
                     let alert = UIAlertController(
                         title: "에러",
