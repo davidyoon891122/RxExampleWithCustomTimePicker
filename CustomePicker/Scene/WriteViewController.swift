@@ -39,12 +39,22 @@ final class WriteViewController: UIViewController {
 
     private let titleSeparatorView = Separator()
 
+    private lazy var timeDisplayLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .red
+        label.font = .systemFont(ofSize: 18.0, weight: .bold)
+        label.text = "AM 10:00"
+        label.textAlignment = .center
+        return label
+    }()
+
     private lazy var timePickerHStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.distribution = .fillProportionally
         stackView.spacing = 4.0
         [
             timeTitleLabel,
+            timeDisplayLabel,
             openTimePickerbutton
         ]
             .forEach {
@@ -55,8 +65,11 @@ final class WriteViewController: UIViewController {
 
     private lazy var timeTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "시작 시간"
+        label.text = "시작 시간: "
+        label.layer.borderWidth = 1.0
+        label.layer.borderColor = UIColor.lightGray.cgColor
         label.textColor = .label
+        label.textAlignment = .center
         label.font = .systemFont(ofSize: 18.0, weight: .medium)
         return label
     }()
@@ -65,6 +78,8 @@ final class WriteViewController: UIViewController {
         let button = UIButton()
         button.titleLabel?.font = .systemFont(ofSize: 18.0, weight: .medium)
         button.setTitle("타임 피커", for: .normal)
+        button.layer.borderWidth = 1.0
+        button.layer.borderColor = UIColor.lightGray.cgColor
         button.setTitleColor(.blue, for: .normal)
         return button
     }()
@@ -91,8 +106,16 @@ final class WriteViewController: UIViewController {
 
 extension WriteViewController: CustomTimePickerViewProtocol {
     func sendDateInfo(date: String) {
-        print(date)
-        textView.text = date
+        timeDisplayLabel.text = date
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "a hh:mm"
+        let date = dateFormatter.date(from: date)
+
+        let dateTestFormatter = DateFormatter()
+        dateTestFormatter.dateFormat = "a hh:mm"
+        let stringDate = dateTestFormatter.string(from: date ?? Date())
+        print(stringDate)
     }
 }
 private extension WriteViewController {

@@ -216,7 +216,7 @@ private extension CustomTimePickerView {
                     )
                     self.present(alert, animated: true, completion: nil)
                 } else {
-                    self.delegate?.sendDateInfo(date: self.meridiemValue + " " + hour + minute)
+                    self.delegate?.sendDateInfo(date: self.meridiemValue + " " + hour + ":" + minute)
                     self.dismiss(animated: false, completion: nil)
                 }
             })
