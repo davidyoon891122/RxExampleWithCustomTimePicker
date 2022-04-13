@@ -12,6 +12,7 @@ import RxCocoa
 
 class ViewController: UIViewController {
     private let disposeBag = DisposeBag()
+    let testView = UIView()
     private lazy var writeButton: UIButton = {
         let button = UIButton()
         button.setTitle("Write", for: .normal)
@@ -32,6 +33,8 @@ class ViewController: UIViewController {
         button.layer.borderColor = UIColor.lightGray.cgColor
         return button
     }()
+
+    private var blackView = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,9 +83,89 @@ private extension ViewController {
         openScrollPopupButton.rx.tap
             .asDriver()
             .throttle(.milliseconds(300))
-            .drive(onNext: {
-                print("openScrollPopupButton")
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.openWindowView()
+                print("Test")
             })
             .disposed(by: disposeBag)
+    }
+
+    func openWindowView() {
+        blackView.backgroundColor = UIColor(white: 0.2, alpha: 0.8)
+        let windowScenes = UIApplication.shared.connectedScenes
+            .first as? UIWindowScene
+
+        guard let window = windowScenes?.windows.first else { return }
+
+        blackView.frame = window.frame
+        blackView.alpha = 0
+
+        blackView.addGestureRecognizer(
+            UITapGestureRecognizer(
+                target: self,
+                action: #selector(didTapBlackView)
+            )
+        )
+
+        testView.backgroundColor = .systemBackground
+
+        [
+            blackView,
+            testView
+        ]
+            .forEach {
+                window.addSubview($0)
+            }
+
+        let height: CGFloat = 500.0
+        let testViewYOffset = window.frame.height - height
+
+        testView.frame = CGRect(
+            x: 0,
+            y: window.frame.height,
+            width: window.frame.width,
+            height: height
+        )
+
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0,
+            usingSpringWithDamping: 1,
+            initialSpringVelocity: 1,
+            options: .curveEaseInOut,
+            animations: {
+                self.blackView.alpha = 1
+                self.testView.frame = CGRect(
+                    x: 0,
+                    y: testViewYOffset,
+                    width: window.frame.width,
+                    height: height
+                )
+            }, completion: nil)
+    }
+
+    @objc func didTapBlackView() {
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0,
+            usingSpringWithDamping: 1,
+            initialSpringVelocity: 1,
+            options: .curveEaseInOut,
+            animations: {
+                self.blackView.alpha = 0
+
+                let windowScenes = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                guard let window = windowScenes?.windows.first else { return }
+
+                self.testView.frame = CGRect(
+                    x: 0,
+                    y: window.frame.height,
+                    width: self.testView.frame.width,
+                    height: self.testView.frame.height
+                )
+            },
+            completion: nil
+        )
     }
 }

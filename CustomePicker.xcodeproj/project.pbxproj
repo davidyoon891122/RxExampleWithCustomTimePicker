@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9E5ED89793ED29CD81205CE2 /* Pods_CustomePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5329FCF6269F4E252F7659F /* Pods_CustomePicker.framework */; };
+		ADA04A65280692D700026E92 /* DragViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA04A64280692D700026E92 /* DragViewController.swift */; };
 		ADFA54F22804EA2400CFB6AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA54F12804EA2400CFB6AF /* AppDelegate.swift */; };
 		ADFA54F42804EA2400CFB6AF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA54F32804EA2400CFB6AF /* SceneDelegate.swift */; };
 		ADFA54F62804EA2400CFB6AF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFA54F52804EA2400CFB6AF /* ViewController.swift */; };
@@ -25,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		04B39D985A38BBB4F8F4D894 /* Pods-CustomePicker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CustomePicker.release.xcconfig"; path = "Target Support Files/Pods-CustomePicker/Pods-CustomePicker.release.xcconfig"; sourceTree = "<group>"; };
+		ADA04A64280692D700026E92 /* DragViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragViewController.swift; sourceTree = "<group>"; };
 		ADFA54EE2804EA2400CFB6AF /* CustomePicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CustomePicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADFA54F12804EA2400CFB6AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ADFA54F32804EA2400CFB6AF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				ADFA55122804F47D00CFB6AF /* Separator.swift */,
 				ADFA5515280501A200CFB6AF /* CustomTimePickerView.swift */,
 				ADFA551928054E9D00CFB6AF /* CustomViewModel.swift */,
+				ADA04A64280692D700026E92 /* DragViewController.swift */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -241,6 +244,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADA04A65280692D700026E92 /* DragViewController.swift in Sources */,
 				ADFA54F62804EA2400CFB6AF /* ViewController.swift in Sources */,
 				ADFA54F22804EA2400CFB6AF /* AppDelegate.swift in Sources */,
 				ADFA55132804F47D00CFB6AF /* Separator.swift in Sources */,
