@@ -11,39 +11,52 @@ import RxCocoa
 
 protocol CustomViewModelInputs {
     var closeButtonInRelay: PublishRelay<Void> { get }
-    var completButtonInRelay: PublishRelay<String> { get }
     var hourTextFieldInRelay: PublishRelay<String> { get }
+    var minuteTextFieldInRelay: PublishRelay<String> { get }
 }
 
 protocol CustomViewModelOutputs {
     var closeButtonOutReply: PublishRelay<Void> { get }
-    var completButtonOutRelay: PublishRelay<Void> { get }
+    var completeButtonOutRelay: PublishRelay<Void> { get }
+    var completeResultOutRelay: PublishRelay<String> { get}
 }
 
-class CustomViewModel: CustomViewModelInputs, CustomViewModelOutputs {
+protocol CustomViewModelType {
+    var inputs: CustomViewModelInputs { get }
+    var outputs: CustomViewModelOutputs { get }
+
+}
+
+class CustomViewModel: CustomViewModelType, CustomViewModelInputs, CustomViewModelOutputs {
     var hourText: PublishRelay<String> = .init()
+
+    var minuteText: PublishRelay<String> = .init()
+
+    // IN
+    var closeButtonInRelay: PublishRelay<Void> = .init()
 
     var hourTextFieldInRelay: PublishRelay<String> = .init()
 
-    private let disposeBag = DisposeBag()
+    var minuteTextFieldInRelay: PublishRelay<String> = .init()
 
-    var completButtonInRelay: PublishRelay<String> = .init()
+    // OUT
+    var closeButtonOutReply: PublishRelay<Void> = .init()
 
     var completButtonOutRelay: PublishRelay<Void> = .init()
 
-    var closeButtonOutReply: PublishRelay<Void> = .init()
+    var completeButtonOutRelay: PublishRelay<Void> = .init()
 
-    var closeButtonInRelay: PublishRelay<Void> = .init()
+    var completeResultOutRelay: PublishRelay<String> = .init()
 
-    func handleCloseButton() {
-        closeButtonInRelay
-            .bind(to: closeButtonOutReply)
-            .disposed(by: disposeBag)
-    }
+    var inputs: CustomViewModelInputs { return self }
+
+    var outputs: CustomViewModelOutputs { return self }
+
+    private let disposeBag = DisposeBag()
 
     func handleHourTextField() {
         hourTextFieldInRelay
-            .map(trimHour)
+            .map(setTimePickerMaxLength)
             .map {
                 self.checkHour($0) ? $0 : ""
             }
@@ -51,15 +64,17 @@ class CustomViewModel: CustomViewModelInputs, CustomViewModelOutputs {
             .disposed(by: disposeBag)
     }
 
-    func handleCompleteButton() {
-        completButtonInRelay
-            .subscribe(onNext: { str in
-                print(str)
-            })
+    func handlerMinuteTextField() {
+        minuteTextFieldInRelay
+            .map(setTimePickerMaxLength)
+            .map {
+                self.checkMinute($0) ? $0 : ""
+            }
+            .bind(to: minuteText)
             .disposed(by: disposeBag)
     }
 
-    func trimHour(_ hour: String) -> String {
+    func setTimePickerMaxLength(_ hour: String) -> String {
         if hour.count > 2 {
             let index = hour.index(hour.startIndex, offsetBy: 2)
             return String(hour[..<index])

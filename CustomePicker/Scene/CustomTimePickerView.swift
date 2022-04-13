@@ -11,10 +11,18 @@ import SnapKit
 import RxCocoa
 import RxSwift
 
+protocol CustomTimePickerViewProtocol: AnyObject {
+    func sendDateInfo(date: String)
+}
+
 final class CustomTimePickerView: UIViewController {
     private let disposeBag = DisposeBag()
 
     private let viewModel = CustomViewModel()
+
+    private lazy var meridiemValue = meridiems[0]
+
+    weak var delegate: CustomTimePickerViewProtocol?
 
     private lazy var blackView: UIView = {
         let view = UIView()
@@ -164,7 +172,7 @@ private extension CustomTimePickerView {
     func bindUI() {
         hourTextField.rx.text
             .orEmpty
-            .bind(to: viewModel.hourTextFieldInRelay)
+            .bind(to: viewModel.inputs.hourTextFieldInRelay)
             .disposed(by: disposeBag)
 
         viewModel.handleHourTextField()
@@ -175,27 +183,37 @@ private extension CustomTimePickerView {
 
         minuteTextField.rx.text
             .orEmpty
-            .subscribe(onNext: { [weak self] str in
-                guard let self = self else { return }
-                let result = self.trimHour(str)
-                if self.checkMinute(result) {
-                    self.minuteTextField.text = result
-                } else {
-                    self.minuteTextField.text = ""
-                }
-            })
+            .bind(to: viewModel.inputs.minuteTextFieldInRelay)
+            .disposed(by: disposeBag)
+
+        viewModel.handlerMinuteTextField()
+
+        viewModel.minuteText
+            .bind(to: minuteTextField.rx.text)
             .disposed(by: disposeBag)
 
         completeButton.rx.tap
-            .bind(to: viewModel.closeButtonInRelay )
-            .disposed(by: disposeBag)
-
-        viewModel.closeButtonOutReply
             .subscribe(onNext: {
-                self.dismiss(animated: false, completion: nil)
+                guard let hour = self.hourTextField.text else { return }
+                guard let minute = self.minuteTextField.text else { return }
+                if hour == "" || minute == "" {
+                    let alert = UIAlertController(
+                        title: "에러",
+                        message: "Shouldn't be Null",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(
+                        title: "완료",
+                        style: .cancel,
+                        handler: nil)
+                    )
+                    self.present(alert, animated: true, completion: nil)
+                } else {
+                    self.delegate?.sendDateInfo(date: self.meridiemValue + " " + hour + minute)
+                    self.dismiss(animated: false, completion: nil)
+                }
             })
             .disposed(by: disposeBag)
-
     }
 
     @objc func dismissView() {
@@ -206,32 +224,7 @@ private extension CustomTimePickerView {
         view.endEditing(true)
     }
 
-    func trimHour(_ hour: String) -> String {
-        if hour.count > 2 {
-            let index = hour.index(hour.startIndex, offsetBy: 2)
-            return String(hour[..<index])
-        } else {
-            return hour
-        }
-    }
-
-    func checkHour(_ result: String) -> Bool {
-        if Int(result) ?? 0 > 12  || Int(result) ?? 0 < 0 {
-            print("kidding")
-            return false
-        }
-        return true
-    }
-
-    func checkMinute(_ result: String) -> Bool {
-        if Int(result) ?? 0 > 59 || Int(result) ?? 0 < 0 {
-            print("kidding")
-            return false
-        }
-        return true
-    }
-
     @objc func segmentControlValueChanged(_ sender: UISegmentedControl) {
-        print(sender.selectedSegmentIndex)
+        meridiemValue = meridiems[sender.selectedSegmentIndex]
     }
 }

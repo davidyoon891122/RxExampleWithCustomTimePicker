@@ -89,6 +89,12 @@ final class WriteViewController: UIViewController {
     }
 }
 
+extension WriteViewController: CustomTimePickerViewProtocol {
+    func sendDateInfo(date: String) {
+        print(date)
+        textView.text = date
+    }
+}
 private extension WriteViewController {
     func addSubviews() {
         view.backgroundColor = .systemBackground
@@ -185,6 +191,7 @@ private extension WriteViewController {
             .drive(onNext: { [weak self] in
                 guard let self = self else { return }
                 let customTimePickerView = CustomTimePickerView()
+                customTimePickerView.delegate = self
                 customTimePickerView.modalPresentationStyle = .fullScreen
                 self.present(customTimePickerView, animated: false, completion: nil)
             })
